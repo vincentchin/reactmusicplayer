@@ -6,7 +6,7 @@ export default class MuteButton extends Component {
 
     var volumeToggleClass = classnames({
     'fa' : true,
-    'fa-volume-up': this.props.volume === 1,
+    'fa-volume-up': this.props.volume >= 0.7,
     'fa-volume-down': (1 > this.props.volume) && (this.props.volume > 0),
     'fa-volume-off': this.props.volume === 0
     })

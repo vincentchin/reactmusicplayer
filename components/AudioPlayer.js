@@ -21,6 +21,8 @@ export default class AudioPlayer extends Component {
     this.getDuration = this.getDuration.bind(this);
     this.updateTime = this.updateTime.bind(this);
     this.setVolume = this.setVolume.bind(this);
+    this.hoverVolume = this.hoverVolume.bind(this);
+    this.noShow = this.noShow.bind(this);
     this.toggleMute = this.toggleMute.bind(this);
     this.togglePlay = this.togglePlay.bind(this);
     this.resetSong = this.resetSong.bind(this);
@@ -35,7 +37,8 @@ export default class AudioPlayer extends Component {
       totalTimeDisplay: "",
       currentTimeDisplay: "0:00",
       volume: 1.0,
-      preVolumeValue: 0
+      preVolumeValue: 0,
+      hoverState: false
     }
   }
 
@@ -137,6 +140,17 @@ export default class AudioPlayer extends Component {
     this.audio.volume = volume;
   }
 
+  hoverVolume() {
+    this.setState({
+      hoverState: !this.state.hoverState
+    })
+  }
+
+  noShow() {
+    this.setState({
+      hoverState: false
+    })
+  }
   /* PlayerControl Functions */
 
   play() {
@@ -169,32 +183,45 @@ export default class AudioPlayer extends Component {
   }
 
   render() {
+
+    var showVolumeBar = this.state.hoverState ? 'volume-bar' : 'hidden' ;
+    var showPlayer = this.state.playing ? 'player-container' : 'hidden';
+
     return (
-      <div className="player-container">
 
-        <div className="player-options">
+      <div>
+        <button onClick={this.togglePlay} className="player-btn-play">
+          <PlayButton playing={this.state.playing} />
+        </button>
 
-          <div className="player-buttons">
-            <button onClick={this.togglePlay} className="player-btn">
-              <PlayButton playing={this.state.playing} />
-            </button>
-            <button onClick={this.toggleMute} className="player-btn">
-              <MuteButton volume={this.audio.volume}/>
-            </button>
+        <div className={showPlayer}>
+          <div className="player">
+
+            <div className="player-buttons">
+              <button onClick={this.togglePlay} className="player-btn-play">
+                <PlayButton playing={this.state.playing} />
+              </button>
+            </div>
+
+            <div className="timeline">
+              <div className="current-time">{this.state.currentTimeDisplay}</div>
+              <div className="player-progress-container" onClick={this.setProgress}>
+                <ProgressBar progress={this.state.progress} currentTime={this.audio.currentTime} duration={this.audio.duration} />
+              </div>
+              <div className="total-time">{this.state.totalTimeDisplay}</div>
+            </div>
+
+            <div className="volume-container" onMouseLeave={this.noShow}>
+              <div className={showVolumeBar} onClick={this.setVolume}>
+                <VolumeBar volume={this.audio.volume} />
+              </div>
+              <button onClick={this.toggleMute} onMouseEnter={this.hoverVolume} className="player-btn-volume">
+                <MuteButton volume={this.audio.volume}/>
+              </button>
+            </div>
+
           </div>
-
-          <div className="player-volume-container" onClick={this.setVolume}>
-            <VolumeBar volume={this.audio.volume} />
-          </div>
-
         </div>
-
-        <div>{this.state.currentTimeDisplay}/{this.state.totalTimeDisplay}</div>
-
-        <div className="player-progress-container" onClick={this.setProgress}>
-          <ProgressBar progress={this.state.progress} currentTime={this.audio.currentTime} duration={this.audio.duration} />
-        </div>
-
       </div>
     )
   }
