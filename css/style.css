@@ -53,13 +53,12 @@ body {
   display:inline-flex;
   width: 60%;
   margin:0 auto;
-  padding:30px;
+  padding:25px;
 }
 
 .current-time {
   position:relative;
   margin:0 auto;
-  height: 70px;
 }
 
 .player-progress-container {
@@ -81,7 +80,6 @@ body {
 .total-time {
   position:relative;
   margin:0 auto;
-  height: 70px;
 }
 
 .volume-container {
