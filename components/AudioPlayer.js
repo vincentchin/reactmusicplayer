@@ -38,7 +38,8 @@ export default class AudioPlayer extends Component {
       currentTimeDisplay: "0:00",
       volume: 1.0,
       preVolumeValue: 0,
-      hoverState: false
+      hoverState: false,
+      hidePlayer: true
     }
   }
 
@@ -155,7 +156,8 @@ export default class AudioPlayer extends Component {
 
   play() {
     this.setState({
-      playing: true
+      playing: true,
+      hidePlayer: false
     });
 
     this.audio.play();
@@ -185,7 +187,7 @@ export default class AudioPlayer extends Component {
   render() {
 
     var showVolumeBar = this.state.hoverState ? 'volume-bar' : 'hidden' ;
-    var showPlayer = this.state.playing ? 'player-container' : 'hidden';
+    var showPlayer = this.state.hidePlayer ? 'hidden' : 'player-container' ;
 
     return (
 
