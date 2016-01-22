@@ -19775,7 +19775,8 @@
 	        currentTimeDisplay: "0:00",
 	        volume: 1.0,
 	        preVolumeValue: 0,
-	        hoverState: false
+	        hoverState: false,
+	        hidePlayer: true
 	      };
 	    }
 	  }, {
@@ -19906,7 +19907,8 @@
 	    key: 'play',
 	    value: function play() {
 	      this.setState({
-	        playing: true
+	        playing: true,
+	        hidePlayer: false
 	      });
 
 	      this.audio.play();
@@ -19940,7 +19942,7 @@
 	    value: function render() {
 
 	      var showVolumeBar = this.state.hoverState ? 'volume-bar' : 'hidden';
-	      var showPlayer = this.state.playing ? 'player-container' : 'hidden';
+	      var showPlayer = this.state.hidePlayer ? 'hidden' : 'player-container';
 
 	      return _react2.default.createElement(
 	        'div',
