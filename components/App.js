@@ -6,7 +6,8 @@ export default class App extends Component {
   render() {
     var songs = [
       {
-        url: 'http://dl.tak3da.com/download/1394/03/The Weeknd - Can t Feel My Face [320].mp3'
+        url: 'http://dl.tak3da.com/download/1394/03/The Weeknd - Can t Feel My Face [320].mp3',
+        name: "Can't Feel My Face"
       }
     ]
     return (

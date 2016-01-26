@@ -12,7 +12,13 @@ export default class MuteButton extends Component {
     })
 
     return (
-      <i className={volumeToggleClass}></i>
+      <button
+        onMouseEnter={this.props.onMouseEnter}
+        onClick={this.props.onClick}
+        className="player-btn-volume"
+      >
+        <i className={volumeToggleClass}></i>
+      </button>
     );
   }
 }

@@ -11,7 +11,9 @@ export default class PlayButton extends Component {
   })
 
     return (
-      <i className={playPauseClass}></i>
+      <button onClick={this.props.onClick} className="player-btn-play">
+        <i className={playPauseClass}></i>
+      </button>
     );
   }
 }
