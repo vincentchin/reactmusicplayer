@@ -83,7 +83,8 @@
 	    key: 'render',
 	    value: function render() {
 	      var songs = [{
-	        url: 'http://dl.tak3da.com/download/1394/03/The Weeknd - Can t Feel My Face [320].mp3'
+	        url: 'http://dl.tak3da.com/download/1394/03/The Weeknd - Can t Feel My Face [320].mp3',
+	        name: "Can't Feel My Face"
 	      }];
 	      return _react2.default.createElement(
 	        'div',
@@ -19715,21 +19716,17 @@
 
 	var _PlayButton2 = _interopRequireDefault(_PlayButton);
 
-	var _MuteButton = __webpack_require__(162);
-
-	var _MuteButton2 = _interopRequireDefault(_MuteButton);
-
-	var _ProgressBar = __webpack_require__(163);
-
-	var _ProgressBar2 = _interopRequireDefault(_ProgressBar);
-
-	var _Timeline = __webpack_require__(164);
+	var _Timeline = __webpack_require__(162);
 
 	var _Timeline2 = _interopRequireDefault(_Timeline);
 
-	var _VolumeBar = __webpack_require__(165);
+	var _VolumeContainer = __webpack_require__(164);
 
-	var _VolumeBar2 = _interopRequireDefault(_VolumeBar);
+	var _VolumeContainer2 = _interopRequireDefault(_VolumeContainer);
+
+	var _Player = __webpack_require__(167);
+
+	var _Player2 = _interopRequireDefault(_Player);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19773,6 +19770,7 @@
 	      this.state = {
 	        active: this.props.songs[0],
 	        songs: this.props.songs,
+	        name: this.props.songs[0].name,
 	        progress: 0,
 	        playing: false,
 	        totalTimeDisplay: "",
@@ -19869,14 +19867,14 @@
 	      var target = e.target.nodeName === 'SPAN' ? e.target.parentNode : e.target;
 	      var height = target.clientHeight;
 	      var rect = target.getBoundingClientRect();
-	      var offsetY = e.clientY - rect.top;
-	      var newVolume = 1 - offsetY / height;
+	      var offsetY = rect.top - e.clientY;
+	      var newVolume = offsetY / height + 1;
+
+	      this.audio.volume = newVolume;
 
 	      this.setState({
 	        volume: this.audio.volume
 	      });
-
-	      this.audio.volume = newVolume;
 	    }
 	  }, {
 	    key: 'toggleMute',
@@ -19952,37 +19950,23 @@
 	        'div',
 	        null,
 	        _react2.default.createElement(_PlayButton2.default, { onClick: this.togglePlay, playing: this.state.playing }),
-	        _react2.default.createElement(
-	          'div',
-	          { className: showPlayer },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'player' },
-	            _react2.default.createElement(_PlayButton2.default, { className: 'player-buttons', onClick: this.togglePlay, playing: this.state.playing }),
-	            _react2.default.createElement(_Timeline2.default, {
-	              currentTimeDisplay: this.state.currentTimeDisplay,
-	              setProgress: this.setProgress,
-	              progress: this.state.progress,
-	              duration: this.audio.duration,
-	              currentTime: this.audio.currentTime,
-	              totalTimeDisplay: this.state.totalTimeDisplay
-	            }),
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'volume-container', onMouseLeave: this.noShow },
-	              _react2.default.createElement(
-	                'div',
-	                { className: showVolumeBar, onClick: this.setVolume },
-	                _react2.default.createElement(_VolumeBar2.default, { volume: this.audio.volume })
-	              ),
-	              _react2.default.createElement(
-	                'button',
-	                { onClick: this.toggleMute, onMouseEnter: this.hoverVolume, className: 'player-btn-volume' },
-	                _react2.default.createElement(_MuteButton2.default, { volume: this.audio.volume })
-	              )
-	            )
-	          )
-	        )
+	        !this.state.hidePlayer ? _react2.default.createElement(_Player2.default, {
+	          playerState: this.state,
+	          togglePlay: this.togglePlay,
+	          currentTimeDisplay: this.state.currentTimeDisplay,
+	          setProgress: this.setProgress,
+	          progress: this.state.progress,
+	          duration: this.audio.duration,
+	          currentTime: this.audio.currentTime,
+	          totalTimeDisplay: this.state.totalTimeDisplay,
+	          hoverState: this.state.hoverState,
+	          onMouseLeave: this.noShow,
+	          onMouseEnter: this.hoverVolume,
+	          setVolume: this.setVolume,
+	          volume: this.audio.volume,
+	          toggleMute: this.toggleMute,
+	          songName: this.state.name
+	        }) : null
 	      );
 	    }
 	  }]);
@@ -20126,6 +20110,10 @@
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
+	var _ProgressBar = __webpack_require__(163);
+
+	var _ProgressBar2 = _interopRequireDefault(_ProgressBar);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20134,34 +20122,44 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var MuteButton = function (_Component) {
-	  _inherits(MuteButton, _Component);
+	var Timeline = function (_Component) {
+	  _inherits(Timeline, _Component);
 
-	  function MuteButton() {
-	    _classCallCheck(this, MuteButton);
+	  function Timeline() {
+	    _classCallCheck(this, Timeline);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(MuteButton).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Timeline).apply(this, arguments));
 	  }
 
-	  _createClass(MuteButton, [{
+	  _createClass(Timeline, [{
 	    key: 'render',
 	    value: function render() {
-
-	      var volumeToggleClass = (0, _classnames2.default)({
-	        'fa': true,
-	        'fa-volume-up': this.props.volume >= 0.7,
-	        'fa-volume-down': 1 > this.props.volume && this.props.volume > 0,
-	        'fa-volume-off': this.props.volume === 0
-	      });
-
-	      return _react2.default.createElement('i', { className: volumeToggleClass });
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'timeline' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'current-time' },
+	          this.props.currentTimeDisplay
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'player-progress-container', onClick: this.props.setProgress },
+	          _react2.default.createElement(_ProgressBar2.default, { progress: this.props.progress, currentTime: this.props.currentTime, duration: this.props.duration })
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'total-time' },
+	          this.props.totalTimeDisplay
+	        )
+	      );
 	    }
 	  }]);
 
-	  return MuteButton;
+	  return Timeline;
 	}(_react.Component);
 
-	exports.default = MuteButton;
+	exports.default = Timeline;
 
 /***/ },
 /* 163 */
@@ -20234,6 +20232,14 @@
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
+	var _VolumeBar = __webpack_require__(165);
+
+	var _VolumeBar2 = _interopRequireDefault(_VolumeBar);
+
+	var _MuteButton = __webpack_require__(166);
+
+	var _MuteButton2 = _interopRequireDefault(_MuteButton);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20242,44 +20248,42 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Timeline = function (_Component) {
-	  _inherits(Timeline, _Component);
+	var VolumeContainer = function (_Component) {
+	  _inherits(VolumeContainer, _Component);
 
-	  function Timeline() {
-	    _classCallCheck(this, Timeline);
+	  function VolumeContainer() {
+	    _classCallCheck(this, VolumeContainer);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Timeline).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(VolumeContainer).apply(this, arguments));
 	  }
 
-	  _createClass(Timeline, [{
+	  _createClass(VolumeContainer, [{
 	    key: 'render',
 	    value: function render() {
+	      // var showVolumeBar = this.props.hoverState ? 'volume-bar' : 'hidden' ;
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'timeline' },
-	        _react2.default.createElement(
+	        { className: 'volume-container', onMouseLeave: this.props.onMouseLeave },
+	        this.props.hoverState ? _react2.default.createElement(
 	          'div',
-	          { className: 'current-time' },
-	          this.props.currentTimeDisplay
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'player-progress-container', onClick: this.setProgress },
-	          _react2.default.createElement(ProgressBar, { progress: this.state.progress, currentTime: this.audio.currentTime, duration: this.audio.duration })
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'total-time' },
-	          this.props.totalTimeDisplay
-	        )
+	          {
+	            className: 'volume-bar',
+	            onClick: this.props.setVolume
+	          },
+	          _react2.default.createElement(_VolumeBar2.default, { volume: this.props.volume })
+	        ) : null,
+	        _react2.default.createElement(_MuteButton2.default, {
+	          onMouseEnter: this.props.onMouseEnter,
+	          onClick: this.props.toggleMute,
+	          volume: this.props.volume })
 	      );
 	    }
 	  }]);
 
-	  return Timeline;
+	  return VolumeContainer;
 	}(_react.Component);
 
-	exports.default = Timeline;
+	exports.default = VolumeContainer;
 
 /***/ },
 /* 165 */
@@ -20331,6 +20335,209 @@
 	}(_react.Component);
 
 	exports.default = VolumeBar;
+
+/***/ },
+/* 166 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _classnames = __webpack_require__(161);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var MuteButton = function (_Component) {
+	  _inherits(MuteButton, _Component);
+
+	  function MuteButton() {
+	    _classCallCheck(this, MuteButton);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(MuteButton).apply(this, arguments));
+	  }
+
+	  _createClass(MuteButton, [{
+	    key: 'render',
+	    value: function render() {
+
+	      var volumeToggleClass = (0, _classnames2.default)({
+	        'fa': true,
+	        'fa-volume-up': this.props.volume >= 0.7,
+	        'fa-volume-down': 1 > this.props.volume && this.props.volume > 0,
+	        'fa-volume-off': this.props.volume === 0
+	      });
+
+	      return _react2.default.createElement(
+	        'button',
+	        {
+	          onMouseEnter: this.props.onMouseEnter,
+	          onClick: this.props.onClick,
+	          className: 'player-btn-volume'
+	        },
+	        _react2.default.createElement('i', { className: volumeToggleClass })
+	      );
+	    }
+	  }]);
+
+	  return MuteButton;
+	}(_react.Component);
+
+	exports.default = MuteButton;
+
+/***/ },
+/* 167 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _PlayButton = __webpack_require__(160);
+
+	var _PlayButton2 = _interopRequireDefault(_PlayButton);
+
+	var _Timeline = __webpack_require__(162);
+
+	var _Timeline2 = _interopRequireDefault(_Timeline);
+
+	var _VolumeContainer = __webpack_require__(164);
+
+	var _VolumeContainer2 = _interopRequireDefault(_VolumeContainer);
+
+	var _SongName = __webpack_require__(168);
+
+	var _SongName2 = _interopRequireDefault(_SongName);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Player = function (_Component) {
+	  _inherits(Player, _Component);
+
+	  function Player() {
+	    _classCallCheck(this, Player);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Player).apply(this, arguments));
+	  }
+
+	  _createClass(Player, [{
+	    key: 'render',
+	    value: function render() {
+	      var pState = this.props.playerState;
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'player' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'player-buttons' },
+	          _react2.default.createElement(_PlayButton2.default, { onClick: this.props.togglePlay, playing: pState.playing })
+	        ),
+	        _react2.default.createElement(_Timeline2.default, {
+	          currentTimeDisplay: pState.currentTimeDisplay,
+	          setProgress: this.props.setProgress,
+	          progress: pState.progress,
+	          duration: this.props.duration,
+	          currentTime: this.props.currentTime,
+	          totalTimeDisplay: pState.totalTimeDisplay
+	        }),
+	        _react2.default.createElement(_VolumeContainer2.default, {
+	          hoverState: pState.hoverState,
+	          onMouseLeave: this.props.onMouseLeave,
+	          onMouseEnter: this.props.onMouseEnter,
+	          setVolume: this.props.setVolume,
+	          volume: this.props.volume,
+	          toggleMute: this.props.toggleMute
+	        }),
+	        _react2.default.createElement(_SongName2.default, { songName: this.props.songName })
+	      );
+	    }
+	  }]);
+
+	  return Player;
+	}(_react.Component);
+
+	exports.default = Player;
+
+/***/ },
+/* 168 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SongName = function (_Component) {
+	  _inherits(SongName, _Component);
+
+	  function SongName() {
+	    _classCallCheck(this, SongName);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(SongName).apply(this, arguments));
+	  }
+
+	  _createClass(SongName, [{
+	    key: "render",
+	    value: function render() {
+	      return _react2.default.createElement(
+	        "div",
+	        { className: "song-name" },
+	        "Now Playing \"",
+	        this.props.songName,
+	        "\""
+	      );
+	    }
+	  }]);
+
+	  return SongName;
+	}(_react.Component);
+
+	exports.default = SongName;
 
 /***/ }
 /******/ ]);

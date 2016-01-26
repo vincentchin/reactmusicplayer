@@ -28,7 +28,7 @@ export default class Player extends Component {
             volume={this.props.volume}
             toggleMute={this.props.toggleMute}
           />
-          <SongName songName={this.props.songName}/>
+          <SongName songName={this.props.songName} />
         </div>
     );
   }
